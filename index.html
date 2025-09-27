@@ -710,6 +710,16 @@
                     addNewItem();
                 }
 
+                // Register service worker
+                if ('serviceWorker' in navigator) {
+                    try {
+                        await navigator.serviceWorker.register('sw.js');
+                        console.log('Service Worker registered successfully');
+                    } catch (error) {
+                        console.log('Service Worker registration failed:', error);
+                    }
+                }
+
                 showStatus('App loaded successfully!', 'success');
             } catch (error) {
                 console.error('Error initializing app:', error);
