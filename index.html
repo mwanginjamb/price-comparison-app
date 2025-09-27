@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price Comparison App</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#667eea">
+    <meta name="description" content="Compare prices across stores and save money on your shopping">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon"
+        href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiByeD0iMjQiIGZpbGw9InVybCgjZ3JhZGllbnQwX2xpbmVhcl8xXzEpIi8+CjxwYXRoIGQ9Ik00OCA5NkM0OCA4NC45NTQzIDU2Ljk1NDMgNzYgNjggNzZIMTI0QzEzNS4wNDYgNzYgMTQ0IDg0Ljk1NDMgMTQ0IDk2VjE0NEMxNDQgMTU1LjA0NiAxMzUuMDQ2IDE2NCAxMjQgMTY0SDY4QzU2Ljk1NDMgMTY0IDQ4IDE1NS4wNDYgNDggMTQ0Vjk2WiIgZmlsbD0id2hpdGUiLz4KPHA+dGggZD0iTTY0IDEwMEg5NlY5Nkg2NFYxMDBaIiBmaWxsPSIjNjY3RUVBIi8+CjxwYXRoIGQ9Ik02NCAxMjBIMTI4VjExNkg2NFYxMjBaIiBmaWxsPSIjNjY3RUVBIi8+CjxwYXRoIGQ9Ik02NCAxNDBIMTEyVjEzNkg2NFYxNDBaIiBmaWxsPSIjNjY3RUVBIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImdyYWRpZW50MF9saW5lYXJfMV8xIiB4MT0iMCIgeTE9IjAiIHgyPSIxOTIiIHkyPSIxOTIiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzY2N0VFQSIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM3NjRCQTIiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 16px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            padding: 24px;
+        }
+
+        .store-setup {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            border: 2px solid #e9ecef;
+        }
+
+        .store-setup h2 {
+            color: #495057;
+            margin-bottom: 16px;
+            font-size: 1.4rem;
+        }
+
+        .store-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #dee2e6;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+        }
+
+        .shopping-list {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 16px 8px;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #f1f3f4;
+            vertical-align: middle;
+        }
+
+        td input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+            min-width: 80px;
+        }
+
+        td input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+        }
+
+        .item-name-input {
+            min-width: 120px !important;
+        }
+
+        .total-cell {
+            font-weight: 600;
+            color: #495057;
+            background: #f8f9fa;
+            text-align: center;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+
+        .totals-section {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 24px;
+            margin: 24px -24px -24px -24px;
+            text-align: center;
+        }
+
+        .totals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .total-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .total-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            opacity: 0.9;
+        }
+
+        .total-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .savings-info {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .delete-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: #ff3838;
+            transform: scale(1.1);
+        }
+
+        .status {
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 16px 0;
+            font-weight: 500;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 8px;
+            }
+
+            .main-content {
+                padding: 16px;
+            }
+
+            .header {
+                padding: 20px 16px;
+            }
+
+            table {
+                font-size: 0.8rem;
+            }
+
+            th,
+            td {
+                padding: 8px 4px;
+            }
+
+            td input {
+                padding: 6px 8px;
+                font-size: 0.8rem;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                padding: 14px;
+            }
+
+            .totals-section {
+                margin: 16px -16px -16px -16px;
+                padding: 20px 16px;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛒 Smart Price Compare</h1>
+            <p>Compare prices across stores and save money</p>
+        </div>
+
+        <div class="main-content">
+            <!-- Store Setup Section -->
+            <div class="store-setup">
+                <h2>📍 Store Setup</h2>
+                <div class="store-inputs">
+                    <div class="input-group">
+                        <input type="text" id="store1" placeholder="Store 1 Name" maxlength="20">
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="store2" placeholder="Store 2 Name" maxlength="20">
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="store3" placeholder="Store 3 Name" maxlength="20">
+                    </div>
+                </div>
+                <button class="btn" onclick="updateStoreNames()">Update Store Names</button>
+            </div>
+
+            <div id="status" class="status hidden"></div>
+
+            <!-- Shopping List Section -->
+            <div class="shopping-list">
+                <div class="table-container">
+                    <table id="comparisonTable">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th id="store1Header">Store 1<br><small>Unit Price</small></th>
+                                <th id="store1QtyHeader">Qty</th>
+                                <th id="store1TotalHeader">Total</th>
+                                <th id="store2Header">Store 2<br><small>Unit Price</small></th>
+                                <th id="store2QtyHeader">Qty</th>
+                                <th id="store2TotalHeader">Total</th>
+                                <th id="store3Header">Store 3<br><small>Unit Price</small></th>
+                                <th id="store3QtyHeader">Qty</th>
+                                <th id="store3TotalHeader">Total</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="itemsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="actions">
+                    <button class="btn" onclick="addNewItem()">➕ Add Item</button>
+                    <button class="btn btn-success" onclick="calculateTotals()">🧮 Calculate Totals</button>
+                    <button class="btn btn-danger" onclick="clearAllData()">🗑️ Clear All</button>
+                </div>
+            </div>
+
+            <!-- Totals Section -->
+            <div id="totalsSection" class="totals-section hidden">
+                <h2>💰 Store Totals Comparison</h2>
+                <div class="totals-grid" id="totalsGrid">
+                </div>
+                <div id="savingsInfo" class="savings-info"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // IndexedDB setup
+        let db;
+        let items = [];
+        let storeNames = ['Store 1', 'Store 2', 'Store 3'];
+
+        // Initialize IndexedDB
+        async function initDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open('PriceComparisonDB', 1);
+
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => {
+                    db = request.result;
+                    resolve();
+                };
+
+                request.onupgradeneeded = (event) => {
+                    db = event.target.result;
+
+                    if (!db.objectStoreNames.contains('items')) {
+                        const itemsStore = db.createObjectStore('items', { keyPath: 'id', autoIncrement: true });
+                        itemsStore.createIndex('name', 'name', { unique: false });
+                    }
+
+                    if (!db.objectStoreNames.contains('stores')) {
+                        db.createObjectStore('stores', { keyPath: 'id' });
+                    }
+                };
+            });
+        }
+
+        // Save data to IndexedDB
+        async function saveToIndexedDB() {
+            if (!db) return;
+
+            const transaction = db.transaction(['items', 'stores'], 'readwrite');
+            const itemsStore = transaction.objectStore('items');
+            const storesStore = transaction.objectStore('stores');
+
+            // Clear existing data
+            await itemsStore.clear();
+            await storesStore.clear();
+
+            // Save items
+            items.forEach(item => itemsStore.add(item));
+
+            // Save store names
+            storesStore.add({ id: 'storeNames', names: storeNames });
+
+            showStatus('Data saved successfully!', 'success');
+        }
+
+        // Load data from IndexedDB
+        async function loadFromIndexedDB() {
+            if (!db) return;
+
+            const transaction = db.transaction(['items', 'stores'], 'readonly');
+            const itemsStore = transaction.objectStore('items');
+            const storesStore = transaction.objectStore('stores');
+
+            // Load items
+            const itemsRequest = itemsStore.getAll();
+            const storesRequest = storesStore.get('storeNames');
+
+            itemsRequest.onsuccess = () => {
+                items = itemsRequest.result || [];
+                renderTable();
+            };
+
+            storesRequest.onsuccess = () => {
+                if (storesRequest.result) {
+                    storeNames = storesRequest.result.names;
+                    updateStoreInputs();
+                    updateStoreHeaders();
+                }
+            };
+        }
+
+        // Show status message
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+            status.classList.remove('hidden');
+
+            setTimeout(() => {
+                status.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Update store names
+        function updateStoreNames() {
+            const store1 = document.getElementById('store1').value.trim() || 'Store 1';
+            const store2 = document.getElementById('store2').value.trim() || 'Store 2';
+            const store3 = document.getElementById('store3').value.trim() || 'Store 3';
+
+            storeNames = [store1, store2, store3];
+            updateStoreHeaders();
+            saveToIndexedDB();
+            showStatus('Store names updated!', 'success');
+        }
+
+        // Update store input fields
+        function updateStoreInputs() {
+            document.getElementById('store1').value = storeNames[0];
+            document.getElementById('store2').value = storeNames[1];
+            document.getElementById('store3').value = storeNames[2];
+        }
+
+        // Update table headers
+        function updateStoreHeaders() {
+            document.getElementById('store1Header').innerHTML = `${storeNames[0]}<br><small>Unit Price</small>`;
+            document.getElementById('store2Header').innerHTML = `${storeNames[1]}<br><small>Unit Price</small>`;
+            document.getElementById('store3Header').innerHTML = `${storeNames[2]}<br><small>Unit Price</small>`;
+        }
+
+        // Add new item
+        function addNewItem() {
+            const newItem = {
+                id: Date.now(),
+                name: '',
+                store1Price: 0,
+                store1Qty: 1,
+                store2Price: 0,
+                store2Qty: 1,
+                store3Price: 0,
+                store3Qty: 1
+            };
+
+            items.push(newItem);
+            renderTable();
+            saveToIndexedDB();
+        }
+
+        // Delete item
+        function deleteItem(id) {
+            items = items.filter(item => item.id !== id);
+            renderTable();
+            saveToIndexedDB();
+            showStatus('Item deleted!', 'success');
+        }
+
+        // Update item data
+        function updateItem(id, field, value) {
+            const item = items.find(item => item.id === id);
+            if (item) {
+                if (field === 'name') {
+                    item[field] = value;
+                } else {
+                    item[field] = parseFloat(value) || 0;
+                }
+                renderTable();
+                saveToIndexedDB();
+            }
+        }
+
+        // Calculate total for an item at a store
+        function calculateItemTotal(price, qty) {
+            return (parseFloat(price) || 0) * (parseInt(qty) || 0);
+        }
+
+        // Render the table
+        function renderTable() {
+            const tbody = document.getElementById('itemsTableBody');
+            tbody.innerHTML = '';
+
+            items.forEach(item => {
+                const row = document.createElement('tr');
+
+                const store1Total = calculateItemTotal(item.store1Price, item.store1Qty);
+                const store2Total = calculateItemTotal(item.store2Price, item.store2Qty);
+                const store3Total = calculateItemTotal(item.store3Price, item.store3Qty);
+
+                row.innerHTML = `
+                    <td>
+                        <input type="text" class="item-name-input" value="${item.name}" 
+                               onchange="updateItem(${item.id}, 'name', this.value)" 
+                               placeholder="Item name">
+                    </td>
+                    <td>
+                        <input type="number" step="0.01" min="0" value="${item.store1Price}" 
+                               onchange="updateItem(${item.id}, 'store1Price', this.value)"
+                               placeholder="0.00">
+                    </td>
+                    <td>
+                        <input type="number" min="1" value="${item.store1Qty}" 
+                               onchange="updateItem(${item.id}, 'store1Qty', this.value)">
+                    </td>
+                    <td class="total-cell">$${store1Total.toFixed(2)}</td>
+                    <td>
+                        <input type="number" step="0.01" min="0" value="${item.store2Price}" 
+                               onchange="updateItem(${item.id}, 'store2Price', this.value)"
+                               placeholder="0.00">
+                    </td>
+                    <td>
+                        <input type="number" min="1" value="${item.store2Qty}" 
+                               onchange="updateItem(${item.id}, 'store2Qty', this.value)">
+                    </td>
+                    <td class="total-cell">$${store2Total.toFixed(2)}</td>
+                    <td>
+                        <input type="number" step="0.01" min="0" value="${item.store3Price}" 
+                               onchange="updateItem(${item.id}, 'store3Price', this.value)"
+                               placeholder="0.00">
+                    </td>
+                    <td>
+                        <input type="number" min="1" value="${item.store3Qty}" 
+                               onchange="updateItem(${item.id}, 'store3Qty', this.value)">
+                    </td>
+                    <td class="total-cell">$${store3Total.toFixed(2)}</td>
+                    <td>
+                        <button class="delete-btn" onclick="deleteItem(${item.id})" title="Delete item">
+                            ✕
+                        </button>
+                    </td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+
+        // Calculate and display totals
+        function calculateTotals() {
+            if (items.length === 0) {
+                showStatus('Please add some items first!', 'error');
+                return;
+            }
+
+            let store1Total = 0;
+            let store2Total = 0;
+            let store3Total = 0;
+
+            items.forEach(item => {
+                store1Total += calculateItemTotal(item.store1Price, item.store1Qty);
+                store2Total += calculateItemTotal(item.store2Price, item.store2Qty);
+                store3Total += calculateItemTotal(item.store3Price, item.store3Qty);
+            });
+
+            const totals = [store1Total, store2Total, store3Total];
+            const minTotal = Math.min(...totals);
+            const maxTotal = Math.max(...totals);
+            const maxSavings = maxTotal - minTotal;
+
+            // Display totals
+            const totalsGrid = document.getElementById('totalsGrid');
+            totalsGrid.innerHTML = '';
+
+            totals.forEach((total, index) => {
+                const isLowest = total === minTotal && maxSavings > 0;
+                const card = document.createElement('div');
+                card.className = 'total-card';
+                card.innerHTML = `
+                    <h3>${storeNames[index]} ${isLowest ? '🏆' : ''}</h3>
+                    <div class="total-amount">$${total.toFixed(2)}</div>
+                    ${isLowest && maxSavings > 0 ? '<small>🎯 Best Deal!</small>' : ''}
+                `;
+                totalsGrid.appendChild(card);
+            });
+
+            // Display savings info
+            const savingsInfo = document.getElementById('savingsInfo');
+            if (maxSavings > 0) {
+                const bestStoreIndex = totals.indexOf(minTotal);
+                savingsInfo.innerHTML = `
+                    <h3>💡 Savings Summary</h3>
+                    <p><strong>${storeNames[bestStoreIndex]}</strong> offers the best total price!</p>
+                    <p>You can save up to <strong>$${maxSavings.toFixed(2)}</strong> by choosing the right store.</p>
+                `;
+            } else {
+                savingsInfo.innerHTML = `
+                    <h3>📊 Summary</h3>
+                    <p>All stores have the same total cost for your shopping list.</p>
+                `;
+            }
+
+            // Show totals section
+            document.getElementById('totalsSection').classList.remove('hidden');
+
+            // Scroll to totals
+            document.getElementById('totalsSection').scrollIntoView({ behavior: 'smooth' });
+
+            showStatus('Totals calculated successfully!', 'success');
+        }
+
+        // Clear all data
+        function clearAllData() {
+            if (confirm('Are you sure you want to clear all data? This cannot be undone.')) {
+                items = [];
+                storeNames = ['Store 1', 'Store 2', 'Store 3'];
+                updateStoreInputs();
+                updateStoreHeaders();
+                renderTable();
+                document.getElementById('totalsSection').classList.add('hidden');
+                saveToIndexedDB();
+                showStatus('All data cleared!', 'success');
+            }
+        }
+
+        // Initialize the app
+        async function init() {
+            try {
+                await initDB();
+                await loadFromIndexedDB();
+
+                // Add a sample item if none exist
+                if (items.length === 0) {
+                    addNewItem();
+                }
+
+                showStatus('App loaded successfully!', 'success');
+            } catch (error) {
+                console.error('Error initializing app:', error);
+                showStatus('Error loading app. Please refresh the page.', 'error');
+            }
+        }
+
+        // Start the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+
+</html>
